@@ -10,17 +10,22 @@
 
 <link rel="stylesheet"
 	th:href="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css}">
-<script type="text/javascript"	th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
+<link rel="stylesheet" th:href="@{/fontawesome/all.css}">
+<link rel="stylesheet" th:href="@{/css/styles.css}">
+
+<script type="text/javascript"
+	th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
 
 
 
 <script th:src="@{/webjars/bootstrap/4.0.0-2/js/bootstrap.min.js}"></script>
 </head>
+
 <body>
 	<div class="container-fluid">
 		<div>
 			<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-			
+
 				<a class="navbar-brand" th:href="@{/}"> <img
 					th:src="@{/images/ShopmeAdminSmall.png}">
 				</a>
@@ -67,40 +72,49 @@
 
 		<div th:if="${message !=null}" class="alert alert-success text-center">
 
-			[[${message}]]
-		</div>
+			[[${message}]]</div>
 
 		<div class="table-responsive-xl">
-			<table class="table table-bordered table-striped table-hover table-responsive-xl text-center">
+			<table
+				class="table table-bordered table-striped table-hover table-responsive-xl text-center">
 				<thead class="thead-dark ">
-			<tr>
-				<th>User ID</th>
-				<th>Photos</th>
-				<th>Email</th>
-				<th>First Name</th>
-				<th>Last Name</th>
-				<th>Role</th>
-				<th>Enabled</th>
-				
-				
-			</tr>
-		</thead>
-	<tbody>
-			<tr th:each="tempListuser : ${listuser}">
-			
-			<td th:text="${tempListuser.id}" />	
-			<td  />
-				<td th:text="${tempListuser.email}" />
-				<td th:text="${tempListuser.firstName}" />	
-				<td th:text="${tempListuser.lastName}" />	
-				<td th:text="${tempListuser.roles}" />	
-				<td th:text="${tempListuser.enabled}" />	
-				<td> 
-				Edit &nbsp;| Delete<td/>	
-			</tr>
-		</tbody>
-		
-				
+					<tr>
+						<th>User ID</th>
+						<th>Photos</th>
+						<th>Email</th>
+						<th>First Name</th>
+						<th>Last Name</th>
+						<th>Role</th>
+						<th>Enabled</th>
+
+
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="user : ${listuser}">
+
+						<td th:text="${user.id}" />
+						<td />
+						<td th:text="${user.email}" />
+						<td th:text="${user.firstName}" />
+						<td th:text="${user.lastName}" />
+						<td th:text="${user.roles}" />
+						<td th:text="${user.enabled}" />
+						<td><a th:if="${user.enabled == true}"
+							class="fas fa-check-circle fa-2x icon-green"></a>
+							  <a th:if="${user.enabled == false}"
+							class="fas fa-check-circle fa-2x icon-dark" href=""></a></td>
+
+
+						<td><a class="fas fa-edit fa-2x icon-green"	 
+						
+						th:href="@{'/users/edit/' + ${user.id}}" title="Edit this user"></a>
+							&nbsp;<a class="fas fa-trash fa-2x icon-dark" href=""></a>
+						<td />
+					</tr>
+				</tbody>
+
+
 
 			</table>
 		</div>

@@ -1,8 +1,10 @@
 package com.shopme.admin.user;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,9 +24,6 @@ public class UserService {
 	private PasswordEncoder passwordEncoder ;
 	
 	
-	
-	
-
 	public List<User> listAll() {
 
 		return (List<User>) userRepo.findAll();
@@ -51,6 +50,16 @@ public class UserService {
 		User userByEmail = userRepo.getUserByEmail(email);
 		return userByEmail == null;
 	}
+
+	public User get(Integer id) throws UserNotFoundException {
 	
-	
+		try {
+			return userRepo.findById(id).get();
+		
+		
+		} catch (NoSuchElementException ex) {
+			
+			throw new UserNotFoundException("could not find any User with ID" + id);
+			
+		}	}
 }
