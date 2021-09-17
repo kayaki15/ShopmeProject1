@@ -27,16 +27,16 @@ public class UserController {
 	}
 
 	@GetMapping("/users/new")
+	
 	public String newUser(Model model) {
-
 		// injecting list rolles from user service to this model which is user
 		List<Role> thelistRoles = service.listRoles();
 
-		User user = new User();
+		User user = new User(); 
 		user.setEnabled(true);
 		model.addAttribute("user", user);
 		model.addAttribute("listRoles", thelistRoles);
-
+		model.addAttribute("pageTitle" , "Create New User") ;
 		return "user_form";
 
 	}
@@ -60,12 +60,16 @@ public class UserController {
 			Model model,
 			RedirectAttributes redirectAttributes) {
 
+		
 		try {
+			
 			User user = service.get(id);
-
+			List<Role> thelistRoles = service.listRoles();
 			model.addAttribute("user", user);
-
+			model.addAttribute("pageTitle" , "Edit New User(ID:" +id +")") ;
+			model.addAttribute("listRoles", thelistRoles);
 			return "user_form";
+			
 		} catch (UserNotFoundException ex) {
 			redirectAttributes.addFlashAttribute("message", ex.getMessage());
 			return "redirect:/users";
