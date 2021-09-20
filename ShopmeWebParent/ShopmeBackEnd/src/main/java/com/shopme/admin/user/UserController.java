@@ -27,16 +27,16 @@ public class UserController {
 	}
 
 	@GetMapping("/users/new")
-	
+
 	public String newUser(Model model) {
 		// injecting list rolles from user service to this model which is user
 		List<Role> thelistRoles = service.listRoles();
 
-		User user = new User(); 
+		User user = new User();
 		user.setEnabled(true);
 		model.addAttribute("user", user);
 		model.addAttribute("listRoles", thelistRoles);
-		model.addAttribute("pageTitle" , "Create New User") ;
+		model.addAttribute("pageTitle", "Create New User");
 		return "user_form";
 
 	}
@@ -56,20 +56,17 @@ public class UserController {
 
 	}
 	@GetMapping("/users/edit/{id}")
-	public String editUser(@PathVariable(name = "id") Integer id, 
-			Model model,
-			RedirectAttributes redirectAttributes) {
+	public String editUser(@PathVariable(name = "id") Integer id, Model model, RedirectAttributes redirectAttributes) {
 
-		
 		try {
-			
+
 			User user = service.get(id);
 			List<Role> thelistRoles = service.listRoles();
 			model.addAttribute("user", user);
-			model.addAttribute("pageTitle" , "Edit New User(ID:" +id +")") ;
+			model.addAttribute("pageTitle", "Edit New User(ID:" + id + ")");
 			model.addAttribute("listRoles", thelistRoles);
 			return "user_form";
-			
+
 		} catch (UserNotFoundException ex) {
 			redirectAttributes.addFlashAttribute("message", ex.getMessage());
 			return "redirect:/users";
@@ -77,4 +74,36 @@ public class UserController {
 
 	}
 
+	@GetMapping("/users/delete/{id}")
+	public String deleteUser(@PathVariable(name = "id") Integer id, 
+			Model model,
+			RedirectAttributes redirectAttributes) {
+		
+		try {
+
+			service.delete(id);
+			
+			redirectAttributes.addFlashAttribute("message", 
+					"The user ID " + id + " has been deleted successfully");  
+
+		}
+		
+	 catch (UserNotFoundException ex) {
+			
+			
+			redirectAttributes.addFlashAttribute("message", ex.getMessage());
+	 }
+			return "redirect:/users";
+
+		}
+		
+	@GetMapping("/users/{id}/enabled/{status}")
+	public String updateUserEnabledStatus(@PathVariable("id") Integer id,
+			@PathVariable("status") boolean enabled, RedirectAttributes redirectAttributes) {
+				service.updateUserEnabledStatus(id, enabled);
+				String status = enabled ? "enabled" : "disabled";
+				String message = "The user ID " + id + " has been " + status;
+		redirectAttributes.addFlashAttribute("message" , message);
+		return "redirect:/users" ;
+}
 }
