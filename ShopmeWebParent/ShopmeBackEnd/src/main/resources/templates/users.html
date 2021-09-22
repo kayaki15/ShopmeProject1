@@ -93,11 +93,14 @@
 				<tbody>
 					<tr th:each="user : ${listusers}">
 						<td th:text="${user.id}"> </td>
-					<td>
+						
+						
+						
+					    <td>
 							<span th:if="${user.photos == null}" class="fa fa-portrait fa-3x icon-silver" ></span>
 							<img th:if="${user.photos != null}" th:src="@{${user.photosImagePath}}"
-								style="width: 100px" />
-						</td>
+								style="width: 1000px" />
+						</td> 
 				
 						<td th:text="${user.email}"> </td>
 						<td th:text="${user.firstName}"> </td>

@@ -50,19 +50,30 @@ public class UserController {
 	public String saveUser(User user, RedirectAttributes redirectAttributes,
 			@RequestParam("image") MultipartFile multipartFile) throws IOException {
 
-		if(multipartFile.isEmpty()) {
-		}
-		String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-		user.setPhotos(fileName);
-		User savedUser = service.save(user);
-		String uploadDir = "user-photos/" + savedUser.getId();
+		if(!multipartFile.isEmpty()) {
+	
 		
-		FileUploadUtil.cleanDir(uploadDir);
+		String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+		 user.setPhotos(fileName);
+		 User savedUser = service.save(user);
+		 
+		 String uploadDir = "user-photos/" + savedUser.getId();
+
+	FileUploadUtil.cleanDir(uploadDir);
 		FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
 		// here for attaching save to UserService for registering the new user in
 		// database and display to our screen!!!
-
-		// service.save(user);
+		
+		}
+		else {
+			
+			if(user.getPhotos().isEmpty()) user.setPhotos(null);
+				
+				 service.save(user);
+		}
+		
+		
+		//
 
 		///
 

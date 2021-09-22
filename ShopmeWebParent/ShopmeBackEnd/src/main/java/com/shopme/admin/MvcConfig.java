@@ -14,7 +14,6 @@ public class MvcConfig  implements WebMvcConfigurer {
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
-//		WebMvcConfigurer.super.addResourceHandlers(registry);
 		String dirName ="user-photos" ;
 	
 		Path userPhotoDir =Paths.get(dirName) ;
