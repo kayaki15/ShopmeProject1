@@ -91,26 +91,29 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="user : ${listuser}">
+					<tr th:each="user : ${listusers}">
+						<td th:text="${user.id}"> </td>
+					<td>
+							<span th:if="${user.photos == null}" class="fa fa-portrait fa-3x icon-silver" ></span>
+							<img th:if="${user.photos != null}" th:src="@{${user.photosImagePath}}"
+								style="width: 100px" />
+						</td>
+				
+						<td th:text="${user.email}"> </td>
+						<td th:text="${user.firstName}"> </td>
+						<td th:text="${user.lastName}"> </td>
+						<td th:text="${user.roles}"> </td>
 
-						<td th:text="${user.id}" />
-						<td />
-						<td th:text="${user.email}" />
-						<td th:text="${user.firstName}" />
-						<td th:text="${user.lastName}" />
-						<td th:text="${user.roles}" />
-						<td th:text="${user.enabled}" />
-						
-						
+
+
 						<td><a th:if="${user.enabled == true}"
-							class="fas fa-check-circle fa-2x icon-green" 
-							 th:href="@{'/users/'  + ${user.id} + '/enabled/false'}" title="Disable This User"></a> 
-							
-							<a th:if="${user.enabled == false}"
+							class="fas fa-check-circle fa-2x icon-green"
+							th:href="@{'/users/'  + ${user.id} + '/enabled/false'}"
+							title="Disable This User"></a> <a
+							th:if="${user.enabled == false}"
 							class="fas fa-circle fa-2x icon-dark"
-							 th:href="@{'/users/'  + ${user.id} + '/enabled/true'}" title="Enable This User"></a>
-							 
-							 </td>
+							th:href="@{'/users/'  + ${user.id} + '/enabled/true'}"
+							title="Enable This User"></a></td>
 
 
 						<td><a class="fas fa-edit fa-2x icon-green"

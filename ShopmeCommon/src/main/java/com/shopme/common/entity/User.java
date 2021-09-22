@@ -1,5 +1,6 @@
 package com.shopme.common.entity;
 
+import java.beans.Transient;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -141,7 +142,12 @@ public class User implements Serializable{
 				+ ", roles=" + roles + "]";
 	}
 
-
+@Transient
+public String getPhotosImagePath() {
+	
+	if (id == null || photos == null ) return "/images/default-image.png" ;
+	return "/user-photos/" + this.id + "/"  + this.photos ;
+}
 	
 	
 }
