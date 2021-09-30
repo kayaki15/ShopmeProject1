@@ -1,6 +1,7 @@
 package com.shopme.admin.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -25,9 +26,31 @@ public class UserController {
 	private UserService service;
 
 	@GetMapping("/users")
-	public String listAll(Model model) {
-		List<User> TheListUsers = service.listAll();
-		model.addAttribute("listusers", TheListUsers);
+	public String listFirstPage(Model model) {
+		return listByPage(1, model);
+	}
+
+	@GetMapping("/users/page/{pageNum}")
+	public String listByPage(@PathVariable(name = "pageNum") int pageNum, Model model) {
+
+		Page<User> page = service.listByPage(pageNum);
+
+		List<User> listusers = page.getContent();
+
+		long startCount = (pageNum - 1) * UserService.USERS_PER_PAGE + 1;
+		long endCount = startCount + UserService.USERS_PER_PAGE - 1;
+
+		if (endCount > page.getTotalElements()) {
+
+			endCount = page.getTotalElements();
+		}
+		
+		model.addAttribute("currentPage", pageNum);
+		model.addAttribute("totalPages", page.getTotalPages());
+		model.addAttribute("startCount", startCount);
+		model.addAttribute("endCount", endCount);
+		model.addAttribute("totalItems", page.getTotalElements());
+		model.addAttribute("listusers", listusers);
 		return "users";
 	}
 
@@ -50,34 +73,32 @@ public class UserController {
 	public String saveUser(User user, RedirectAttributes redirectAttributes,
 			@RequestParam("image") MultipartFile multipartFile) throws IOException {
 
-		if(!multipartFile.isEmpty()) {
-	
-		
-		String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-		 user.setPhotos(fileName);
-		 User savedUser = service.save(user);
-		 
-		 String uploadDir = "user-photos/" + savedUser.getId();
+		if (!multipartFile.isEmpty()) {
 
-	FileUploadUtil.cleanDir(uploadDir);
-		FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
-		// here for attaching save to UserService for registering the new user in
-		// database and display to our screen!!!
-		
+			String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+			user.setPhotos(fileName);
+			User savedUser = service.save(user);
+
+			String uploadDir = "user-photos/" + savedUser.getId();
+
+			FileUploadUtil.cleanDir(uploadDir);
+			FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+			// here for attaching save to UserService for registering the new user in
+			// database and display to our screen!!!
+
+		} else {
+
+			if (user.getPhotos().isEmpty())
+				user.setPhotos(null);
+
+			service.save(user);
 		}
-		else {
-			
-			if(user.getPhotos().isEmpty()) user.setPhotos(null);
-				
-				 service.save(user);
-		}
-		
-		
+
 		//
 
 		///
 
-		 redirectAttributes.addFlashAttribute("message", "The User has been saved successfully.");
+		redirectAttributes.addFlashAttribute("message", "The User has been saved successfully.");
 
 		return "redirect:/users";
 

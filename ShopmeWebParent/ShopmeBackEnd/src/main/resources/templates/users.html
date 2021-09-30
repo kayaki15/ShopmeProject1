@@ -86,26 +86,24 @@
 						<th>Last Name</th>
 						<th>Role</th>
 						<th>Enabled</th>
-
-
 					</tr>
 				</thead>
+
 				<tbody>
+
+
 					<tr th:each="user : ${listusers}">
-						<td th:text="${user.id}"> </td>
-						
-						
-						
-					    <td>
-							<span th:if="${user.photos == null}" class="fa fa-portrait fa-3x icon-silver" ></span>
-							<img th:if="${user.photos != null}" th:src="@{${user.photosImagePath}}"
-								style="width: 1000px" />
-						</td> 
-				
-						<td th:text="${user.email}"> </td>
-						<td th:text="${user.firstName}"> </td>
-						<td th:text="${user.lastName}"> </td>
-						<td th:text="${user.roles}"> </td>
+						<td th:text="${user.id}">
+						<td><span th:if="${user.photos == null}"
+							class="fa fa-portrait fa-3x icon-silver"></span> <img
+							th:if="${user.photos != null}"
+							th:src="@{${user.photosImagePath}}" style="width: 100px" /></td>
+
+						<td th:text="${user.email}"></td>
+						<td th:text="${user.firstName}"></td>
+						<td th:text="${user.lastName}"></td>
+						<td th:text="${user.lastName}"></td>
+						<td th:text="${user.roles}"></td>
 
 
 
@@ -124,8 +122,7 @@
 
 							&nbsp; <a class="fas fa-trash fa-2x icon-green link-delete"
 							th:href="@{'/users/delete/' + ${user.id}}" th:userId="${user.id}"
-							title="Delete this user"></a>
-						<td />
+							title="Delete this user"></a></td>
 					</tr>
 				</tbody>
 
@@ -133,6 +130,44 @@
 
 			</table>
 		</div>
+
+		<div class="text-center m-1" th:if="${totalItems > 0}">
+
+			<span>Showing users # [[${startCount}]] to [[${endCount}]] of
+				[[${totalItems}]] </span>
+		</div>
+
+		<div class="text-center m-1" th:unless="${totalItems > 0}">
+			<span>No users Found</span>
+		</div>
+
+
+
+		<div>
+			
+		<nav>
+		<ul class="pagination justify-content-center">
+
+  <li class="page-item"><a class="page-link" th:href="@{/users/page/1}">First</a></li>
+    <li class="page-item"><a class="page-link" th:href="@{'/users/page/' + ${currentPage - 1}}">Previous</a></li>
+    
+    
+    <li class="page-item" th:each=" i : ${#numbers.sequence(1,totalPages)}">
+    <a class="page-link" th:href="@{'/users/page/' + ${i}}">[[${i}]]</a>
+    </li>
+
+    <li class="page-item"><a class="page-link" th:href="@{'/users/page/' + ${currentPage + 1 }}">Next</a></li>
+        <li class="page-item"><a class="page-link" th:href="@{'/users/page/' + ${totalPages}}">Last</a></li>
+    
+  </ul>
+
+</nav>
+	
+		</div>
+		
+	
+		
+
 
 		<div class="modal fade text-center" id="confirmModal">
 
@@ -182,7 +217,6 @@
 									"click",
 									function(e) {
 										e.preventDefault();
-									
 
 										link = $(this);
 										userId = link.attr("userId");
@@ -198,4 +232,5 @@
 	</script>
 
 </body>
+
 </html>
