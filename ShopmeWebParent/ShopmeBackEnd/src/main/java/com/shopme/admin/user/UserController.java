@@ -29,18 +29,21 @@ public class UserController {
 
 	@GetMapping("/users")
 	public String listFirstPage(Model model) {
-		return listByPage(1, model ,"firstName" ,"asc");
+		return listByPage(1, model, "firstName", "asc" , null);
 	}
 
 	@GetMapping("/users/page/{pageNum}")
-	public String listByPage(@PathVariable(name = "pageNum") int pageNum, Model model , 
-			@Param("sortField") String sortField , @Param("sortDir") String sortDir ) {
-System.out.println("Sort Field "  + sortField);
-System.out.println("Sort Order "  + sortDir);
+	public String listByPage(
+			
+			@PathVariable(name = "pageNum") int pageNum, Model model,
+			@Param("sortField") String sortField, @Param("sortDir") String sortDir,
+			@Param("keyword") String keyword
+			
+			) {
+		System.out.println("Sort Field " + sortField);
+		System.out.println("Sort Order " + sortDir);
 
-
-
-		Page<User> page = service.listByPage(pageNum ,sortField , sortDir);
+		Page<User> page = service.listByPage(pageNum, sortField, sortDir , keyword);
 
 		List<User> listusers = page.getContent();
 
@@ -51,9 +54,9 @@ System.out.println("Sort Order "  + sortDir);
 
 			endCount = page.getTotalElements();
 		}
-		
-		String reverseSortDir = sortDir.equals("asc") ? "desc" : "asc" ;
-		
+
+		String reverseSortDir = sortDir.equals("asc") ? "desc" : "asc";
+
 		model.addAttribute("currentPage", pageNum);
 		model.addAttribute("totalPages", page.getTotalPages());
 		model.addAttribute("startCount", startCount);
@@ -63,6 +66,7 @@ System.out.println("Sort Order "  + sortDir);
 		model.addAttribute("sortField", sortField);
 		model.addAttribute("sortDir", sortDir);
 		model.addAttribute("reverseSortDir", reverseSortDir);
+		model.addAttribute("keyword", keyword);
 		return "users";
 	}
 
