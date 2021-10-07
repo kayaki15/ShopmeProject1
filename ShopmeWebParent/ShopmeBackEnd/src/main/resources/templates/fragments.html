@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+</head>
+<body>
+	<!-- COLUMN LINK -->
+	<th th:fragment="column_link(fieldName, columnLabel)"><a
+		class="text-white"
+		th:href="@{'/users/page/' + ${currentPage} + '?sortField=' + ${fieldName}  +'&sortDir=' + ${sortField != fieldName ? sortDir : reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">
+			[[${columnLabel}]] </a> <span th:if="${sortField == fieldName}"
+		th:class="${sortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down' }">
+
+
+	</span></th>
+	<!-- COLUMN LINK END -->
+
+	<!-- PAGE LINK -->
+	<a th:fragment="page_link(pageNum, label)"
+	 class="page-link" 
+	  th:href="@{'/users/page/'  + ${pageNum} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''} + ${categoryId != null ? '&categoryId=' + categoryId : ''}}">[[${label}]]</a>
+	
+	<!-- PAGE LINK END -->
+
+</body>
+</html>

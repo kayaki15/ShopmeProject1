@@ -29,21 +29,20 @@ public class UserController {
 
 	@GetMapping("/users")
 	public String listFirstPage(Model model) {
-		return listByPage(1, model, "firstName", "asc" , null);
+		return listByPage(1, model, "firstName", "asc", null);
 	}
 
 	@GetMapping("/users/page/{pageNum}")
 	public String listByPage(
-			
-			@PathVariable(name = "pageNum") int pageNum, Model model,
-			@Param("sortField") String sortField, @Param("sortDir") String sortDir,
-			@Param("keyword") String keyword
-			
-			) {
+
+			@PathVariable(name = "pageNum") int pageNum, Model model, @Param("sortField") String sortField,
+			@Param("sortDir") String sortDir, @Param("keyword") String keyword
+
+	) {
 		System.out.println("Sort Field " + sortField);
 		System.out.println("Sort Order " + sortDir);
 
-		Page<User> page = service.listByPage(pageNum, sortField, sortDir , keyword);
+		Page<User> page = service.listByPage(pageNum, sortField, sortDir, keyword);
 
 		List<User> listusers = page.getContent();
 
@@ -115,9 +114,13 @@ public class UserController {
 		///
 
 		redirectAttributes.addFlashAttribute("message", "The User has been saved successfully.");
+		return getRedirectURLtoAffectedUser(user);
 
-		return "redirect:/users";
+	}
 
+	private String getRedirectURLtoAffectedUser(User user) {
+		String firstPartOfEmail = user.getEmail().split("@")[0];
+		return "redirect:/users/page/1/?sortField=id&sortDir=asc&keyword="  + firstPartOfEmail;
 	}
 
 	@GetMapping("/users/edit/{id}")
